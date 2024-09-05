@@ -1,3 +1,0 @@
-WedgeNumber: 
-Angle: 
-Area: 

@@ -15,29 +15,38 @@ function writeStructToTxt(myStruct, filename)
 end
 
 function writeFields(fileID, s, prefix)
-    % Get all the field names of the struct
-    fields = fieldnames(s);
-    
-    for i = 1:length(fields)
-        fieldName = fields{i}; % Get the field name
-        fieldValue = s.(fieldName); % Get the corresponding value
-        
-        % Create a prefix for nested structures
-        fullFieldName = strcat(prefix, fieldName);
-        
-        if isstruct(fieldValue)
-            % If the field is a struct, recursively call the function
-            writeFields(fileID, fieldValue, strcat(fullFieldName, '.'));
-        else
-            % Write the field name and value to the file
-            if isnumeric(fieldValue)
-                fprintf(fileID, '%s: %f\n', fullFieldName, fieldValue);
-            elseif ischar(fieldValue)
-                fprintf(fileID, '%s: %s\n', fullFieldName, fieldValue);
-            elseif islogical(fieldValue)
-                fprintf(fileID, '%s: %d\n', fullFieldName, fieldValue);  % Print logical as 0/1
+    % Check if s is a struct array
+    if numel(s) > 1
+        for idx = 1:numel(s)
+            % For each element in the struct array, call the function recursively
+            newPrefix = sprintf('%s(%d).', prefix, idx);
+            writeFields(fileID, s(idx), newPrefix);
+        end
+    else
+        % Get all the field names of the struct
+        fields = fieldnames(s);
+
+        for i = 1:length(fields)
+            fieldName = fields{i}; % Get the field name
+            fieldValue = s.(fieldName); % Get the corresponding value
+
+            % Create a prefix for nested structures
+            fullFieldName = strcat(prefix, fieldName);
+
+            if isstruct(fieldValue)
+                % If the field is a struct, recursively call the function
+                writeFields(fileID, fieldValue, strcat(fullFieldName, '.'));
             else
-                fprintf(fileID, '%s: %s\n', fullFieldName, mat2str(fieldValue));  % For other types
+                % Write the field name and value to the file
+                if isnumeric(fieldValue)
+                    fprintf(fileID, '%s: %f\n', fullFieldName, fieldValue);
+                elseif ischar(fieldValue)
+                    fprintf(fileID, '%s: %s\n', fullFieldName, fieldValue);
+                elseif islogical(fieldValue)
+                    fprintf(fileID, '%s: %d\n', fullFieldName, fieldValue);  % Print logical as 0/1
+                else
+                    fprintf(fileID, '%s: %s\n', fullFieldName, mat2str(fieldValue));  % For other types
+                end
             end
         end
     end
