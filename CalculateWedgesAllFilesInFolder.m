@@ -15,7 +15,7 @@ function CalculateWedgesAllFilesInFolder(folderPath)
         wedgesData = AngleFinderSliceSizer(filePath);
         
         % Save the output struct to a .csv file
-        outputFileName = [files(i).name(1:end-4) '_wedges.csv'];
+        outputFileName = [files(i).name(1:end-4) '_wedges.txt'];
         writeStructToTxt(wedgesData,outputFileName);
     end
 end
