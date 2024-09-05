@@ -11,5 +11,5 @@ Prompts for two lines (via four points)
 Prompts for a wedge polygon.
   Calculates the area of the polygon in pixels.
 
-Sometimes seems to return the exterior rather than interior angle--use the annotated images to confirm, and if
-incorrect, you can subtract from 180 degrees in the text file output.
+BUG: Sometimes seems to return the exterior rather than interior angle--use the annotated images to confirm, and if
+incorrect, you can subtract the provided result (in the annotate image or text file output) from 180 degrees
